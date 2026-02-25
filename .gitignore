@@ -3,3 +3,4 @@ logs/
 RAG_Medcal_Chatbot.egg-info/
 .env
 __pycache__
+FULL_DOCUMENTATION.md
