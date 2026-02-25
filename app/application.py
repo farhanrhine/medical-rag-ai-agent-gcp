@@ -1,9 +1,9 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from flask import Flask,render_template,request,session,redirect,url_for
 from app.components.agent import get_agent_response
-from dotenv import load_dotenv
 import os
-
-load_dotenv()
 HF_TOKEN = os.environ.get("HF_TOKEN")
 
 app = Flask(__name__)

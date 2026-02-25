@@ -1,4 +1,5 @@
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEndpointEmbeddings
+from app.config.config import EMBEDDING_MODEL, HF_TOKEN
 
 from app.common.logger import get_logger
 from app.common.custom_exception import CustomException
@@ -7,15 +8,18 @@ logger = get_logger(__name__)
 
 def get_embedding_model():
     try:
-        logger.info("Intializing our Huggingface embedding model")
+        logger.info(f"Initializing HuggingFace Endpoint Embeddings with model: {EMBEDDING_MODEL}")
 
-        model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+        model = HuggingFaceEndpointEmbeddings(
+            model=EMBEDDING_MODEL,
+            huggingfacehub_api_token=HF_TOKEN
+        )
 
-        logger.info("Huggingface embedding model loaded sucesfully....")
+        logger.info("HuggingFace endpoint embedding model loaded successfully.")
 
         return model
     
     except Exception as e:
-        error_message=CustomException("Error occured while loading embedding model" , e)
+        error_message = CustomException("Error occurred while loading embedding model", e)
         logger.error(str(error_message))
         raise error_message

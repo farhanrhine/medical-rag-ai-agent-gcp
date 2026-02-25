@@ -83,7 +83,13 @@ def get_agent_response(user_message: str) -> str:
         return "Sorry, I could not generate a response."
 
     last_message = messages[-1]
-    content = last_message.get("content", "")
+    
+    # Check if last_message is a dictionary or an object (like AIMessage)
+    if isinstance(last_message, dict):
+        content = last_message.get("content", "")
+    else:
+        # Assume it's a LangChain message object (BaseMessage)
+        content = getattr(last_message, "content", "")
 
     # Content may be a simple string or a list of content blocks.
     if isinstance(content, str):
