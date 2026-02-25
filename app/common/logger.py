@@ -8,9 +8,12 @@ os.makedirs(LOGS_DIR,exist_ok=True)
 LOG_FILE = os.path.join(LOGS_DIR, f"log_{datetime.now().strftime('%Y-%m-%d')}.log")
 
 logging.basicConfig(
-    filename=LOG_FILE,
+    level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
-    level=logging.INFO
+    handlers=[
+        logging.FileHandler(LOG_FILE),
+        logging.StreamHandler()
+    ]
 )
 
 def get_logger(name):

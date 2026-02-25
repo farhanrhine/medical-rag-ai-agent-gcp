@@ -9,4 +9,4 @@ CHUNK_SIZE = 500
 CHUNK_OVERLAP = 50
 
 # Groq / Qwen configuration
-GROQ_QWEN_MODEL = os.environ.get("GROQ_QWEN_MODEL", "qwen-qwq-32b")
+GROQ_QWEN_MODEL = os.environ.get("GROQ_QWEN_MODEL", "qwen/qwen3-32b")
