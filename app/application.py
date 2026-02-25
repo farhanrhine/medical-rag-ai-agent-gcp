@@ -1,5 +1,5 @@
 from flask import Flask,render_template,request,session,redirect,url_for
-from app.components.retriever import create_qa_chain
+from app.components.agent import get_agent_response
 from dotenv import load_dotenv
 import os
 
@@ -29,9 +29,7 @@ def index():
             session["messages"] = messages
 
             try:
-                qa_chain = create_qa_chain()
-                response = qa_chain.invoke({"query" : user_input})
-                result = response.get("result" , "No response")
+                result = get_agent_response(user_input)
 
                 messages.append({"role" : "assistant" , "content" : result})
                 session["messages"] = messages
