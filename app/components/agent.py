@@ -1,12 +1,13 @@
 from typing import Any, Dict, List
 
 from langchain.agents import create_agent
-from langchain.chat_models import init_chat_model
 from langchain.tools import tool
+from langchain_groq import ChatGroq
 
 from app.components.vector_store import load_vector_store
 from app.common.logger import get_logger
 from app.common.custom_exception import CustomException
+from app.config.config import GROQ_QWEN_MODEL
 
 
 logger = get_logger(__name__)
@@ -46,12 +47,12 @@ def medical_retriever(question: str) -> str:
 
 def _build_agent():
     try:
-        model = init_chat_model(
-            "claude-sonnet-4-5-20250929",
+        model = ChatGroq(
+            model=GROQ_QWEN_MODEL,
             temperature=0,
         )
     except Exception as e:
-        error = CustomException("Failed to initialize chat model for agent", e)
+        error = CustomException("Failed to initialize Groq Qwen model for agent", e)
         logger.error(str(error))
         raise
 
