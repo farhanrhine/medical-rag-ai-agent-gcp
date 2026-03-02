@@ -82,7 +82,7 @@ pipeline {
                             --platform managed \
                             --quiet
                         """
-                    }
+                    } // TODO: change `credentialsId` from jenkins global credentials (stage 3)
                 }
             }
         }

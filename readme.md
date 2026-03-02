@@ -180,13 +180,13 @@ gcloud config set project YOUR_PROJECT_ID
 
 # Build & push
 docker build -t medical-rag-ai-agent .
-docker tag medical-rag-ai-agent us-central1-docker.pkg.dev/YOUR_PROJECT_ID/medical-rag/medical-rag-ai-agent:latest
+docker tag medical-rag-ai-agent us-central1-docker.pkg.dev/YOUR_PROJECT_ID/medical-rag-ai-agent/medical-rag-ai-agent:latest
 gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
-docker push us-central1-docker.pkg.dev/YOUR_PROJECT_ID/medical-rag/medical-rag-ai-agent:latest
+docker push us-central1-docker.pkg.dev/YOUR_PROJECT_ID/medical-rag-ai-agent/medical-rag-ai-agent:latest
 
 # Deploy to Cloud Run
-gcloud run deploy medical-rag-chatbot \
-    --image us-central1-docker.pkg.dev/YOUR_PROJECT_ID/medical-rag/medical-rag-ai-agent:latest \
+gcloud run deploy medical-rag-ai-agent \
+    --image us-central1-docker.pkg.dev/YOUR_PROJECT_ID/medical-rag-ai-agent/medical-rag-ai-agent:latest \
     --region us-central1 \
     --port 5000 \
     --allow-unauthenticated
