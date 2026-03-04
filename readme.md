@@ -6,24 +6,21 @@ An AI-powered medical question-answering chatbot built with **LangChain Agents**
 
 ```mermaid
 flowchart TD
-    A["🧑 User asks a medical question"] --> B["🌐 Flask App"]
-    B --> C["🤖 LangChain Agent\n(create_agent + Qwen3-32B)"]
-    C --> D["🔧 Tool: get_medical_context()"]
-    D --> E["📄 PDF Loader\n(The GALE Encyclopedia)"]
-    E --> E2["🔢 Page Label Extraction\n(PyMuPDF - real printed page numbers)"]
-    E2 --> F["✂️ Text Splitter\n(500 chars, 50 overlap)"]
-    F --> G["🧠 HuggingFace Embeddings\n(all-MiniLM-L6-v2)"]
-    G --> H["📦 FAISS Vector Store"]
-    H -->|"Top-3 chunks + Page numbers"| C
-    C --> I["💬 LLM generates answer\nwith 📖 citations"]
-    I --> J["🖥️ Chat UI\n(Citation card + RAG badge)"]
-    J --> A
+    A["🧑 User asks a medical question"] --> B["🌐 Flask Web Server"]
+    B --> C["🤖 AI Agent"]
+    C --> D["🔧 Search Medical Database"]
+    D --> E["📦 FAISS Vector Store\n(pre-built from PDF)"]
+    E -->|"Top 3 relevant chunks\n+ real page numbers"| C
+    C --> F["💬 LLM generates short answer\nusing ONLY the retrieved text"]
+    F --> G["📖 Adds citations\n(e.g. Page 625, Page 750)"]
+    G --> H["🖥️ Chat UI\n(styled citation card + RAG badge)"]
+    H --> A
 
     style A fill:#e0e7ff,stroke:#4f46e5,color:#1e1b4b
     style C fill:#eef2ff,stroke:#6366f1,color:#312e81
-    style H fill:#f0fdf4,stroke:#22c55e,color:#166534
-    style I fill:#fef3c7,stroke:#f59e0b,color:#78350f
-    style J fill:#f1f5f9,stroke:#64748b,color:#1e293b
+    style E fill:#f0fdf4,stroke:#22c55e,color:#166534
+    style F fill:#fef3c7,stroke:#f59e0b,color:#78350f
+    style H fill:#f1f5f9,stroke:#64748b,color:#1e293b
 ```
 
 ```mermaid
@@ -195,15 +192,25 @@ gcloud run deploy medical-rag-ai-agent \
     --allow-unauthenticated
 ```
 
-## 📖 How Page Citations Work
+## 📖 How Citations Are Added
 
-Unlike most RAG systems that use raw PDF page indices (which don't match printed page numbers), this project:
+Most RAG systems cite "Page 15" — but that's just the PDF index, not the real book page. Our citations show the **actual printed page number** (e.g. Page 625) so you can verify it in the physical book.
 
-1. **Extracts real page labels** using PyMuPDF (`fitz`) — reads the actual printed page numbers from each page's footer text
-2. **Handles front matter** — Roman numeral pages (ix, xi, xiii...) are correctly identified
-3. **Handles content pages** — Arabic numbers (625, 626...) match the physical book exactly
-4. **Stores labels in metadata** — Each text chunk carries the correct printed page number in the FAISS vector store
-5. **Enforces faithfulness** — The LLM is instructed to only cite pages whose content directly answers the question
+**Step 1 — During Setup (one-time):**
+- PyMuPDF opens each PDF page and reads the **footer text** at the bottom
+- The footer has the real printed page number (e.g. "625") next to "GALE ENCYCLOPEDIA OF MEDICINE"
+- This real number gets saved alongside each text chunk in the FAISS database
+- So every chunk already knows: "I came from Page 625"
+
+**Step 2 — When a User Asks a Question:**
+- FAISS returns the top 3 matching chunks — each chunk comes **with its page number already attached**
+- The LLM reads the chunks, sees `[Page 625]`, `[Page 627]`, etc.
+- The LLM writes a short answer and appends: `📖 Sources: Page 625, Page 627`
+- It only cites pages that **directly answered** the question (not every retrieved page)
+
+**Step 3 — In the UI:**
+- JavaScript finds the `📖 Sources:` text in the response
+- Converts it into a styled green citation card with a `✅ RAG-Verified Answer` badge
 
 This means when the app says "Page 750", you can flip to page 750 in the book and verify the answer word-for-word.
 

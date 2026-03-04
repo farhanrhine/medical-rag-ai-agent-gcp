@@ -34,12 +34,20 @@ STRICT RULES — you MUST follow ALL of these:
 
 CITATION RULES:
 - Only cite a page if its content DIRECTLY answered the question — not just because it was retrieved.
+- The page numbers are provided in the retrieved context as [Page XXX | Confidence: YY%]. You MUST use the EXACT page numbers from these markers. NEVER invent or guess a page number.
+- The page numbers in this book are 625 and above. If you find yourself writing a page number below 625, you are making an error.
 - The citation block MUST be the absolute last thing in your response.
-- Use this EXACT format:
+- Use this EXACT format (confidence line MUST come right after the sources):
 
 📖 Sources:
 - {SOURCE_BOOK}, Page X
 - {SOURCE_BOOK}, Page Y
+🎯 Confidence: XX%
+
+CONFIDENCE RULES:
+- The confidence percentage is provided with each retrieved chunk (e.g. [Page 625 | Confidence: 85%]).
+- Calculate the AVERAGE confidence of ONLY the pages you actually cited — not all retrieved pages.
+- Always include the confidence line immediately after citations.
 """
 
 
@@ -56,22 +64,26 @@ _checkpointer = InMemorySaver()
 def get_medical_context(question: str) -> str:
     """Retrieve relevant medical information from the knowledge base for a specific question. 
     Use this tool whenever a medical question is asked to find factual ground truth.
-    The returned context includes page numbers for citation purposes.
+    The returned context includes page numbers and confidence scores for citation purposes.
     """
     try:
         if _db:
-            retriever = _db.as_retriever(search_kwargs={"k": 3})
-            docs = retriever.invoke(question)
-            if not docs:
+            # Use similarity_search_with_score to get L2 distances
+            results = _db.similarity_search_with_score(question, k=3)
+            if not results:
                 return "No relevant medical context found in the database."
             
-            # Build context with page citations
+            # Build context with page citations and confidence scores
             chunks = []
-            for doc in docs:
+            for doc, l2_distance in results:
                 # page metadata is now the real printed page label (e.g. "625")
                 page_num = doc.metadata.get("page", "unknown")
-                source = doc.metadata.get("source", "unknown")
-                chunk_text = f"[Page {page_num}]\n{doc.page_content}"
+                # Convert L2 distance to confidence percentage
+                # Formula: 1/(1+distance) gives 0-1 range, then multiply by 100
+                # Lower L2 distance = higher confidence
+                confidence = round((1 / (1 + l2_distance)) * 100)
+                logger.info(f"Retrieved chunk: Page {page_num}, L2 distance: {l2_distance:.4f}, Confidence: {confidence}%")
+                chunk_text = f"[Page {page_num} | Confidence: {confidence}%]\n{doc.page_content}"
                 chunks.append(chunk_text)
             
             return "\n\n---\n\n".join(chunks)
@@ -120,14 +132,14 @@ def get_agent_response(user_message: str) -> str:
         # Manually strip <thought>...</thought> tags if they appear in the model output
         content = re.sub(r'<thought>.*?</thought>', '', content, flags=re.DOTALL).strip()
         
-        # Strip inline [Page X] markers from the answer body (they're shown in the citation card)
+        # Strip inline [Page X] and [Page X | Confidence: Y%] markers from the answer body
         # Only remove them from the text BEFORE the "📖 Sources:" block
         parts = content.split('📖 Sources:')
         if len(parts) == 2:
-            cleaned_body = re.sub(r'\s*\[Page \d+\]', '', parts[0]).strip()
+            cleaned_body = re.sub(r'\s*\[Page \d+(?:\s*\|\s*Confidence:\s*\d+%)?\]', '', parts[0]).strip()
             content = cleaned_body + '\n\n📖 Sources:' + parts[1]
         else:
-            content = re.sub(r'\s*\[Page \d+\]', '', content).strip()
+            content = re.sub(r'\s*\[Page \d+(?:\s*\|\s*Confidence:\s*\d+%)?\]', '', content).strip()
         
         return content
         
