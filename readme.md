@@ -9,11 +9,11 @@ flowchart TD
     A["🧑 User asks a medical question"] --> B["🌐 Flask Web Server"]
     B --> C["🤖 AI Agent"]
     C --> D["🔧 Search Medical Database"]
-    D --> E["📦 FAISS Vector Store\n(pre-built from PDF)"]
-    E -->|"Top 3 relevant chunks\n+ real page numbers"| C
-    C --> F["💬 LLM generates short answer\nusing ONLY the retrieved text"]
-    F --> G["📖 Adds citations\n(e.g. Page 625, Page 750)"]
-    G --> H["🖥️ Chat UI\n(styled citation card + RAG badge)"]
+    D --> E["📦 FAISS Vector Store<br>(pre-built from PDF)"]
+    E -->|"Top 3 relevant chunks<br>+ real page numbers"| C
+    C --> F["💬 LLM generates short answer<br>using ONLY the retrieved text"]
+    F --> G["📖 Adds citations<br>(e.g. Page 625, Page 750)"]
+    G --> H["🖥️ Chat UI<br>(styled citation card + RAG badge)"]
     H --> A
 
     style A fill:#e0e7ff,stroke:#4f46e5,color:#1e1b4b
@@ -70,7 +70,7 @@ flowchart LR
 ## 📁 Project Structure
 
 ```
-medical-rag-ai-agent/
+MedAssist-AI/
 ├── app/
 │   ├── application.py              # Flask app entry point
 │   ├── components/
@@ -111,8 +111,8 @@ medical-rag-ai-agent/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/farhanrhine/medical-rag-ai-agent-gcp.git
-cd medical-rag-ai-agent-gcp
+git clone https://github.com/farhanrhine/MedAssist-AI.git
+cd MedAssist-AI
 ```
 
 ### 2. Set Up Environment Variables
@@ -152,8 +152,8 @@ Open **<http://127.0.0.1:5000>** in your browser.
 ### Build & Run Locally
 
 ```bash
-docker build -t medical-rag-ai-agent .
-docker run -p 5000:5000 --env-file .env medical-rag-ai-agent
+docker build -t medassist-ai .
+docker run -p 5000:5000 --env-file .env medassist-ai
 ```
 
 ## ☁️ GCP Deployment
@@ -179,14 +179,14 @@ gcloud auth login
 gcloud config set project YOUR_PROJECT_ID
 
 # Build & push
-docker build -t medical-rag-ai-agent .
-docker tag medical-rag-ai-agent us-central1-docker.pkg.dev/YOUR_PROJECT_ID/medical-rag-ai-agent/medical-rag-ai-agent:latest
+docker build -t medassist-ai .
+docker tag medassist-ai us-central1-docker.pkg.dev/YOUR_PROJECT_ID/medassist-ai/medassist-ai:latest
 gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
-docker push us-central1-docker.pkg.dev/YOUR_PROJECT_ID/medical-rag-ai-agent/medical-rag-ai-agent:latest
+docker push us-central1-docker.pkg.dev/YOUR_PROJECT_ID/medassist-ai/medassist-ai:latest
 
 # Deploy to Cloud Run
-gcloud run deploy medical-rag-ai-agent \
-    --image us-central1-docker.pkg.dev/YOUR_PROJECT_ID/medical-rag-ai-agent/medical-rag-ai-agent:latest \
+gcloud run deploy medassist-ai \
+    --image us-central1-docker.pkg.dev/YOUR_PROJECT_ID/medassist-ai/medassist-ai:latest \
     --region us-central1 \
     --port 5000 \
     --allow-unauthenticated

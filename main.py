@@ -1,5 +1,5 @@
 def main():
-    print("Hello from medical-rag-ai-agent!")
+    print("Hello from MedAssist-AI!")
 
 
 if __name__ == "__main__":

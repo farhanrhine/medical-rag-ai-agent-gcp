@@ -1,5 +1,5 @@
 [project]
-name = "medical-rag-ai-agent"
+name = "medassist-ai"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
