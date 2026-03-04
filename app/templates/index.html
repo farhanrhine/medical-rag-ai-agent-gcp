@@ -23,8 +23,61 @@
         body {
             height: 100%;
             font-family: 'Inter', sans-serif;
-            background: #f4f6fb;
-            color: #1e293b;
+            background: var(--bg-page);
+            color: var(--text-primary);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* ── Light Theme (default) ── */
+        :root {
+            --bg-page: #f4f6fb;
+            --bg-app: #ffffff;
+            --bg-header: #ffffff;
+            --bg-input-bar: #ffffff;
+            --bg-input: #f8fafc;
+            --bg-bubble-bot: #f1f5f9;
+            --bg-empty-icon: linear-gradient(135deg, #eef2ff, #e0e7ff);
+            --border-main: #e8ecf2;
+            --border-input: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #334155;
+            --text-muted: #94a3b8;
+            --text-bubble-bot: #334155;
+            --shadow-app: 0 0 40px rgba(0, 0, 0, 0.06);
+            --scrollbar-thumb: #cbd5e1;
+            --clear-bg: #f1f5f9;
+            --clear-border: #e2e8f0;
+            --clear-text: #64748b;
+            --chip-bg: #eef2ff;
+            --chip-border: #e0e7ff;
+            --chip-text: #4f46e5;
+            --disclaimer-text: #94a3b8;
+        }
+
+        /* ── Dark Theme ── */
+        [data-theme="dark"] {
+            --bg-page: #0f172a;
+            --bg-app: #1e293b;
+            --bg-header: #1e293b;
+            --bg-input-bar: #1e293b;
+            --bg-input: #334155;
+            --bg-bubble-bot: #334155;
+            --bg-empty-icon: linear-gradient(135deg, #312e81, #3730a3);
+            --border-main: #334155;
+            --border-input: #475569;
+            --text-primary: #f1f5f9;
+            --text-secondary: #e2e8f0;
+            --text-muted: #94a3b8;
+            --text-bubble-bot: #e2e8f0;
+            --shadow-app: 0 0 40px rgba(0, 0, 0, 0.3);
+            --scrollbar-thumb: #475569;
+            --clear-bg: #334155;
+            --clear-border: #475569;
+            --clear-text: #94a3b8;
+            --chip-bg: #312e81;
+            --chip-border: #4338ca;
+            --chip-text: #a5b4fc;
+            --disclaimer-text: #64748b;
         }
 
         /* ── Layout Shell ── */
@@ -34,8 +87,9 @@
             height: 100vh;
             max-width: 860px;
             margin: 0 auto;
-            background: #ffffff;
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.06);
+            background: var(--bg-app);
+            box-shadow: var(--shadow-app);
+            transition: background 0.3s ease, box-shadow 0.3s ease;
         }
 
         /* ── Header ── */
@@ -44,9 +98,10 @@
             align-items: center;
             justify-content: space-between;
             padding: 16px 24px;
-            border-bottom: 1px solid #e8ecf2;
-            background: #ffffff;
+            border-bottom: 1px solid var(--border-main);
+            background: var(--bg-header);
             flex-shrink: 0;
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
 
         .header-left {
@@ -71,13 +126,38 @@
         .header-title {
             font-size: 18px;
             font-weight: 700;
-            color: #1e293b;
+            color: var(--text-primary);
         }
 
         .header-subtitle {
             font-size: 12px;
-            color: #94a3b8;
+            color: var(--text-muted);
             font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border-input);
+            border-radius: 8px;
+            background: var(--clear-bg);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--chip-bg);
+            border-color: var(--chip-border);
         }
 
         .clear-link {
@@ -87,9 +167,9 @@
             padding: 8px 16px;
             font-size: 13px;
             font-weight: 600;
-            color: #64748b;
-            background: #f1f5f9;
-            border: 1px solid #e2e8f0;
+            color: var(--clear-text);
+            background: var(--clear-bg);
+            border: 1px solid var(--clear-border);
             border-radius: 8px;
             text-decoration: none;
             cursor: pointer;
@@ -122,7 +202,7 @@
         }
 
         .chat-area::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
+            background: var(--scrollbar-thumb);
             border-radius: 10px;
         }
 
@@ -142,7 +222,7 @@
             width: 72px;
             height: 72px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+            background: var(--bg-empty-icon);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -152,12 +232,12 @@
         .empty-state h2 {
             font-size: 20px;
             font-weight: 700;
-            color: #1e293b;
+            color: var(--text-primary);
         }
 
         .empty-state p {
             font-size: 14px;
-            color: #94a3b8;
+            color: var(--text-muted);
             max-width: 360px;
             line-height: 1.6;
         }
@@ -174,9 +254,9 @@
             padding: 8px 14px;
             font-size: 13px;
             font-weight: 500;
-            color: #4f46e5;
-            background: #eef2ff;
-            border: 1px solid #e0e7ff;
+            color: var(--chip-text);
+            background: var(--chip-bg);
+            border: 1px solid var(--chip-border);
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -244,8 +324,8 @@
         }
 
         .msg-row.assistant .bubble {
-            background: #f1f5f9;
-            color: #334155;
+            background: var(--bg-bubble-bot);
+            color: var(--text-bubble-bot);
             border-bottom-left-radius: 4px;
         }
 
@@ -261,7 +341,7 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 4px;
-            color: #94a3b8;
+            color: var(--text-muted);
         }
 
         .msg-row.user .msg-label {
@@ -363,20 +443,21 @@
         /* ── Input Bar ── */
         .input-bar {
             padding: 16px 24px;
-            border-top: 1px solid #e8ecf2;
-            background: #ffffff;
+            border-top: 1px solid var(--border-main);
+            background: var(--bg-input-bar);
             flex-shrink: 0;
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
 
         .input-form {
             display: flex;
             align-items: flex-end;
             gap: 10px;
-            background: #f8fafc;
-            border: 1.5px solid #e2e8f0;
+            background: var(--bg-input);
+            border: 1.5px solid var(--border-input);
             border-radius: 14px;
             padding: 6px 6px 6px 16px;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
         }
 
         .input-form:focus-within {
@@ -391,7 +472,7 @@
             background: transparent;
             font-family: 'Inter', sans-serif;
             font-size: 14px;
-            color: #1e293b;
+            color: var(--text-primary);
             resize: none;
             min-height: 24px;
             max-height: 120px;
@@ -400,7 +481,7 @@
         }
 
         .input-form textarea::placeholder {
-            color: #94a3b8;
+            color: var(--text-muted);
         }
 
         .send-btn {
@@ -435,7 +516,7 @@
         .disclaimer {
             text-align: center;
             font-size: 11px;
-            color: #94a3b8;
+            color: var(--disclaimer-text);
             margin-top: 10px;
         }
 
@@ -480,14 +561,17 @@
                     <div class="header-subtitle">Medical Knowledge Assistant</div>
                 </div>
             </div>
-            <a href="{{ url_for('clear') }}" class="clear-link" id="clear-chat-btn">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="3 6 5 6 21 6"></polyline>
-                    <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path>
-                </svg>
-                Clear
-            </a>
+            <div class="header-actions">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+                <a href="{{ url_for('clear') }}" class="clear-link" id="clear-chat-btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path>
+                    </svg>
+                    Clear
+                </a>
+            </div>
         </header>
 
         <!-- Chat Area -->
@@ -676,6 +760,28 @@
             input.value = text;
             input.focus();
         }
+        // Dark mode toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const savedTheme = localStorage.getItem('theme') || 'light';
+
+        // Apply saved theme on load
+        if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeToggle.textContent = '☀️';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                document.documentElement.removeAttribute('data-theme');
+                themeToggle.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeToggle.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
     </script>
 </body>
 

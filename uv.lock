@@ -879,7 +879,7 @@ wheels = [
 ]
 
 [[package]]
-name = "medical-rag-ai-agent"
+name = "medassist-ai"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
