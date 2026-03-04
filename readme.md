@@ -43,10 +43,12 @@ flowchart LR
 
 - **RAG-Powered Answers** — Retrieves relevant context from a FAISS vector store built on a medical encyclopedia
 - **Accurate Page Citations** — Uses PyMuPDF to extract real printed page numbers from the PDF (handles Roman numeral front matter and Arabic content pages), so citations match the physical book exactly
+- **Confidence Score** — Shows how confident the retrieval is (based on FAISS similarity distance), color-coded green/yellow/red
 - **RAG Faithfulness** — Strict system prompt ensures the LLM only answers from retrieved context, never hallucinating from training knowledge. If the context doesn't cover the topic, it says so honestly
 - **Modern LangChain Agent** — Uses the latest `create_agent` + `init_chat_model` API pattern
 - **Conversational Memory** — Maintains chat history within a session using `InMemorySaver`
-- **Clean UI** — Modern, responsive chat interface with styled citation cards and suggestion chips
+- **Dark Mode** — Toggle between light and dark themes, preference saved in localStorage
+- **Clean UI** — Modern, responsive chat interface with styled citation cards, suggestion chips, and subtle click sounds
 - **CI/CD Pipeline** — Jenkins pipeline with Trivy security scanning and GCP Cloud Run deployment
 - **Dockerized** — Production-ready Docker image using `uv` for fast dependency management
 
