@@ -1,15 +1,15 @@
 pipeline {
     agent any
 
-    environment {
-        // ── GCP Config ──
-        // GCP_PROJECT_ID = 'YOUR_GCP_PROJECT_ID'           // TODO: Replace with your GCP project ID
-        // GCP_REGION = 'us-central1'
-        // GAR_REPO = 'medassist-ai'                          // Artifact Registry repository name
-        // CLOUD_RUN_SERVICE = 'medassist-ai'
-        // IMAGE_NAME = 'medassist-ai'
-        // IMAGE_TAG = 'latest'
-    }
+    // environment {
+    //     // ── GCP Config ──
+    //     // GCP_PROJECT_ID = 'YOUR_GCP_PROJECT_ID'           // TODO: Replace with your GCP project ID
+    //     // GCP_REGION = 'us-central1'
+    //     // GAR_REPO = 'medassist-ai'                          // Artifact Registry repository name
+    //     // CLOUD_RUN_SERVICE = 'medassist-ai'
+    //     // IMAGE_NAME = 'medassist-ai'
+    //     // IMAGE_TAG = 'latest'
+    // }
 
     stages {
 
